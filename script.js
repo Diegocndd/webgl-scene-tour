@@ -27,10 +27,6 @@ const prog = createProgram(gl, vtxShader, fragShader);
 
 gl.useProgram(prog);
 
-// let { vertices, indices } = createSphere(50, 50, 0.5);
-// console.log(vertices);
-// renderSphere(gl, prog, vertices, indices);
-
 TEXTIMG = new Image();
 TEXTIMG.crossOrigin = "anonymous";
 TEXTIMG.src = "assets/gato.jpg";
@@ -38,19 +34,248 @@ TEXTIMG.onload = function () {
   createSquare(
     gl,
     prog,
-    TEXTIMG,
-    new Float32Array([
-      -0.5, 0.5, 0.0, 0.0, 0.0, -0.5, -0.5, 0.0, 0.0, 1.0, 0.5, -0.5, 0.0, 1.0,
-      1.0, 0.5, 0.5, 0.0, 1.0, 0.0, -0.5, 0.5, 0.0, 0.0, 0.0,
+    [
+      -0.5,
+      -0.5,
+      0.5,
+      1.0,
+      1.0,
+      0.0,
+      0.0,
+      1.0, // Vértice 0
+      0.5,
+      -0.5,
+      0.5,
+      1.0,
+      1.0,
+      0.0,
+      0.0,
+      1.0, // Vértice 1
+      0.5,
+      0.5,
+      0.5,
+      1.0,
+      1.0,
+      0.0,
+      0.0,
+      1.0, // Vértice 2
+      -0.5,
+      0.5,
+      0.5,
+      1.0,
+      1.0,
+      0.0,
+      0.0,
+      1.0, // Vértice 3
 
-      //Quad 2
-      -0.5, -0.5, 0.0, 1.0, 1.0, -0.5, 0.5, 0.0, 1.0, 0.0, -0.5, 0.5, 1.0, 0.0,
-      0.0, -0.5, -0.5, 1.0, 0.0, 1.0, -0.5, -0.5, 0.0, 1.0, 1.0,
+      // Face traseira
+      -0.5,
+      -0.5,
+      -0.5,
+      1.0,
+      1.0,
+      0.0,
+      0.0,
+      1.0, // Vértice 4
+      0.5,
+      -0.5,
+      -0.5,
+      1.0,
+      1.0,
+      0.0,
+      0.0,
+      1.0, // Vértice 5
+      0.5,
+      0.5,
+      -0.5,
+      1.0,
+      1.0,
+      0.0,
+      0.0,
+      1.0, // Vértice 6
+      -0.5,
+      0.5,
+      -0.5,
+      1.0,
+      1.0,
+      0.0,
+      0.0,
+      1.0, // Vértice 7
 
-      //Quad 3
-      0.5, -0.5, 1.0, 1.0, 1.0, 0.5, -0.5, 0.0, 1.0, 0.0, -0.5, -0.5, 0.0, 0.0,
-      0.0, -0.5, -0.5, 1.0, 0.0, 1.0, 0.5, -0.5, 1.0, 1.0, 1.0,
-    ])
+      // Face superior
+      -0.5,
+      0.5,
+      0.5,
+      1.0,
+      1.0,
+      0.0,
+      1.0,
+      1.0, // Vértice 8
+      0.5,
+      0.5,
+      0.5,
+      1.0,
+      1.0,
+      0.0,
+      1.0,
+      1.0, // Vértice 9
+      0.5,
+      0.5,
+      -0.5,
+      1.0,
+      1.0,
+      0.0,
+      1.0,
+      1.0, // Vértice 10
+      -0.5,
+      0.5,
+      -0.5,
+      1.0,
+      1.0,
+      0.0,
+      1.0,
+      1.0, // Vértice 11
+
+      // Face inferior
+      -0.5,
+      -0.5,
+      0.5,
+      1.0,
+      0.0,
+      1.0,
+      0.0,
+      1.0, // Vértice 12
+      0.5,
+      -0.5,
+      0.5,
+      1.0,
+      0.0,
+      1.0,
+      0.0,
+      1.0, // Vértice 13
+      0.5,
+      -0.5,
+      -0.5,
+      1.0,
+      0.0,
+      1.0,
+      0.0,
+      1.0, // Vértice 14
+      -0.5,
+      -0.5,
+      -0.5,
+      1.0,
+      0.0,
+      1.0,
+      0.0,
+      1.0, // Vértice 15
+
+      // Face direita
+      0.5,
+      -0.5,
+      0.5,
+      1.0,
+      1.0,
+      1.0,
+      0.0,
+      1.0, // Vértice 16
+      0.5,
+      -0.5,
+      -0.5,
+      1.0,
+      0.0,
+      1.0,
+      0.0,
+      1.0, // Vértice 17
+      0.5,
+      0.5,
+      -0.5,
+      1.0,
+      1.0,
+      1.0,
+      0.0,
+      1.0, // Vértice 18
+      0.5,
+      0.5,
+      0.5,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0, // Vértice 19
+
+      // Face esquerda
+      -0.5,
+      -0.5,
+      0.5,
+      1.0,
+      1.0,
+      0.0,
+      0.0,
+      1.0, // Vértice 20
+      -0.5,
+      -0.5,
+      -0.5,
+      1.0,
+      1.0,
+      0.0,
+      0.0,
+      1.0, // Vértice 21
+      -0.5,
+      0.5,
+      -0.5,
+      1.0,
+      1.0,
+      0.0,
+      0.0,
+      1.0, // Vértice 22
+      -0.5,
+      0.5,
+      0.5,
+      1.0,
+      0.0,
+      1.0,
+      0.0,
+      1.0, // Vértice 23
+    ],
+    [
+      0,
+      1,
+      2,
+      0,
+      2,
+      3, // Face frontal
+      4,
+      5,
+      6,
+      4,
+      6,
+      7, // Face traseira
+      8,
+      9,
+      10,
+      8,
+      10,
+      11, // Face superior
+      12,
+      13,
+      14,
+      12,
+      14,
+      15, // Face inferior
+      16,
+      17,
+      18,
+      16,
+      18,
+      19, // Face direita
+      20,
+      21,
+      22,
+      20,
+      22,
+      23, // Face esquerda
+    ]
   );
   draw();
 };
@@ -58,32 +283,7 @@ TEXTIMG.onload = function () {
 function draw() {
   initOpenGL(gl);
 
-  const mproj = createPerspective(
-    20,
-    gl.canvas.width / gl.canvas.height,
-    1,
-    10
-  );
-  const cam = createCamera([5, 5, 5], [0, 0, 0], [5, 6, 5]);
-
-  var matRotZ = math.matrix([
-    [
-      Math.cos((angle * Math.PI) / 180.0),
-      -Math.sin((angle * Math.PI) / 180.0),
-      0.0,
-      0.0,
-    ],
-    [
-      Math.sin((angle * Math.PI) / 180.0),
-      Math.cos((angle * Math.PI) / 180.0),
-      0.0,
-      0.0,
-    ],
-    [0.0, 0.0, 1.0, 0.0],
-    [0.0, 0.0, 0.0, 1.0],
-  ]);
-
-  var matRotY = math.matrix([
+  var matrotY = math.matrix([
     [
       Math.cos((angle * Math.PI) / 180.0),
       0.0,
@@ -100,7 +300,7 @@ function draw() {
     [0.0, 0.0, 0.0, 1.0],
   ]);
 
-  var matRotX = math.matrix([
+  var matrotX = math.matrix([
     [1.0, 0.0, 0.0, 0.0],
     [
       0.0,
@@ -117,25 +317,16 @@ function draw() {
     [0.0, 0.0, 0.0, 1.0],
   ]);
 
-  let transforma = math.multiply(matRotY, matRotX);
-  transforma = math.multiply(matRotZ, transforma);
-  transforma = math.multiply(cam, transforma);
-  transforma = math.multiply(mproj, transforma);
+  var transforma = math.multiply(matrotY, matrotX);
 
   transforma = math.flatten(math.transpose(transforma))._data;
 
-  let transfPtr = gl.getUniformLocation(prog, "transf");
+  const transfPtr = gl.getUniformLocation(prog, "transf");
   gl.uniformMatrix4fv(transfPtr, false, transforma);
 
-  gl.drawArrays(gl.TRIANGLES, 0, 3);
-  gl.drawArrays(gl.TRIANGLES, 2, 3);
+  gl.drawElements(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0);
 
-  gl.drawArrays(gl.TRIANGLES, 5, 3);
-  gl.drawArrays(gl.TRIANGLES, 7, 3);
-
-  gl.drawArrays(gl.TRIANGLES, 10, 3);
-  gl.drawArrays(gl.TRIANGLES, 12, 3);
-  // angle += 1;
+  angle += 1;
 
   requestAnimationFrame(draw);
 }

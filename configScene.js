@@ -1,36 +1,25 @@
 import { initOpenGL } from "./utils.js";
 
-export function createSquare(gl, prog, texture, coords) {
-  // quad -> x, y, z, u, v
-  // const coords = ;
-
+export function createSquare(gl, prog, coords, indices) {
   const buffPtr = gl.createBuffer();
-  // cria o array buffer na GPU
   gl.bindBuffer(gl.ARRAY_BUFFER, buffPtr);
-  // joga para o array da GPU as coordenadas do triângulo
-  gl.bufferData(gl.ARRAY_BUFFER, coords, gl.STATIC_DRAW);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(coords), gl.STATIC_DRAW);
 
-  // pega o ponteiro do position do vertex shade
+  var indexBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+  gl.bufferData(
+    gl.ELEMENT_ARRAY_BUFFER,
+    new Uint16Array(indices),
+    gl.STATIC_DRAW
+  );
+
   const positionPtr = gl.getAttribLocation(prog, "position");
   gl.enableVertexAttribArray(positionPtr);
-  // especifica como será a cópia para o position
-  gl.vertexAttribPointer(positionPtr, 3, gl.FLOAT, false, 5 * 4, 0);
+  gl.vertexAttribPointer(positionPtr, 4, gl.FLOAT, false, 8 * 4, 0);
 
-  const textCoordPtr = gl.getAttribLocation(prog, "textCoord");
-  gl.enableVertexAttribArray(textCoordPtr);
-  gl.vertexAttribPointer(textCoordPtr, 2, gl.FLOAT, false, 5 * 4, 3 * 4);
-
-  // submeter texture para gpu
-  const tex0 = gl.createTexture();
-  gl.activeTexture(gl.TEXTURE0);
-  gl.bindTexture(gl.TEXTURE_2D, tex0);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, texture);
-
-  //   const dfPtr = gl.getUniformLocation(prog, "df");
-  //   gl.uniform1f(dfPtr, df);
+  const colorPtr = gl.getAttribLocation(prog, "color");
+  gl.enableVertexAttribArray(colorPtr);
+  gl.vertexAttribPointer(colorPtr, 4, gl.FLOAT, false, 8 * 4, 4 * 4);
 }
 
 export function renderSphere(gl, prog, vertices, indices) {
