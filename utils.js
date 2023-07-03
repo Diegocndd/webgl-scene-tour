@@ -1,8 +1,8 @@
-export async function loadGLSL() {
+export async function loadGLSL(folder) {
   let vertexCode = "";
   let fragCode = "";
 
-  await fetch("shaders/vertexShader.glsl")
+  await fetch(`shaders/${folder}/vertexShader.glsl`)
     .then((response) => response.text())
     .then((glslCode) => {
       vertexCode = glslCode;
@@ -11,7 +11,7 @@ export async function loadGLSL() {
       console.error("Erro ao carregar o arquivo GLSL:", error);
     });
 
-  await fetch("shaders/fragmentShader.glsl")
+  await fetch(`shaders/${folder}/fragmentShader.glsl`)
     .then((response) => response.text())
     .then((glslCode) => {
       fragCode = glslCode;
