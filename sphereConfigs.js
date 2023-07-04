@@ -1,6 +1,10 @@
-export default function createSphere(numLongitudes, numLatitudes, radius) {
+export default function sphereConfigs() {
+  // Vertices da esfera
   const vertices = [];
   const indices = [];
+  const numLongitudes = 50;
+  const numLatitudes = 50;
+  const radius = 0.5;
 
   for (let lat = 0; lat <= numLatitudes; lat++) {
     const theta = (lat * Math.PI) / numLatitudes;
@@ -16,7 +20,12 @@ export default function createSphere(numLongitudes, numLatitudes, radius) {
       const y = cosTheta;
       const z = sinPhi * sinTheta;
 
-      vertices.push(radius * x, radius * y, radius * z);
+      vertices.push(radius * x, radius * y, radius * z, 1.0);
+      if (lon % 2 === 0) {
+        vertices.push(1.0, 1.0, 0.0, 1.0);
+      } else {
+        vertices.push(1.0, 0.0, 1.0, 1.0);
+      }
     }
   }
 
