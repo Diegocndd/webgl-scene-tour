@@ -4,14 +4,13 @@ import { cubeConfigs, pyramidConfigs, sphereConfigs } from "./configs.js";
 import { createProgram, initOpenGL, loadGLSL } from "./utils.js";
 
 let TEXTIMG;
-let angleP = 0;
-let angleC = 0;
+let angle = 0;
 
 const canvas = document.getElementById("glcanvas");
 const gl = canvas.getContext("webgl");
 
 const getTransforma = (angle) => {
-  var matrotZ = math.matrix([
+  const matrotZ = math.matrix([
     [
       Math.cos((angle * Math.PI) / 180.0),
       -Math.sin((angle * Math.PI) / 180.0),
@@ -28,7 +27,7 @@ const getTransforma = (angle) => {
     [0.0, 0.0, 0.0, 1.0],
   ]);
 
-  var matrotY = math.matrix([
+  const matrotY = math.matrix([
     [
       Math.cos((angle * Math.PI) / 180.0),
       0.0,
@@ -45,7 +44,7 @@ const getTransforma = (angle) => {
     [0.0, 0.0, 0.0, 1.0],
   ]);
 
-  var matrotX = math.matrix([
+  const matrotX = math.matrix([
     [1.0, 0.0, 0.0, 0.0],
     [
       0.0,
@@ -74,42 +73,44 @@ const getTransforma = (angle) => {
 
 TEXTIMG = new Image();
 TEXTIMG.crossOrigin = "anonymous";
-TEXTIMG.src = "assets/gato.jpg";
+TEXTIMG.src = "assets/earth.jpg";
 TEXTIMG.onload = async function () {
-  ///////////
+  const prog1 = await buildSphere(gl);
+  const sphere = sphereConfigs(25, 25, 0.5);
 
-  const prog1 = await buildPyramid(gl);
-  const pyramid = pyramidConfigs(0.5, 1, 0, 0, 0);
-
-  ///////////
-
-  const prog2 = await buildCube(gl);
-  const cube = cubeConfigs(0.4, 0, 0, 1);
-
-  ///////////
-
+  console.log(sphere.vertices);
   function draw() {
     initOpenGL(gl);
 
-    const transformaP = getTransforma(angleP);
-    const transformaC = getTransforma(angleC);
+    const matrotY = [
+      Math.cos((angle * Math.PI) / 180.0),
+      0.0,
+      -Math.sin((angle * Math.PI) / 180.0),
+      0.0,
 
-    createCube(gl, prog2, cube.vertices, cube.indices);
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      Math.sin((angle * Math.PI) / 180.0),
+      0.0,
+      Math.cos((angle * Math.PI) / 180.0),
+      0.0,
 
-    gl.useProgram(prog2);
-    const transfPtr2 = gl.getUniformLocation(prog2, "transf");
-    gl.uniformMatrix4fv(transfPtr2, false, transformaC);
-    gl.drawElements(gl.TRIANGLES, cube.indices.length, gl.UNSIGNED_SHORT, 0);
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+    ];
 
-    createPyramid(gl, prog1, pyramid.vertices, pyramid.indices);
+    createSphere(gl, prog1, sphere.vertices, sphere.indices, TEXTIMG);
 
     gl.useProgram(prog1);
     const transfPtr = gl.getUniformLocation(prog1, "transf");
-    gl.uniformMatrix4fv(transfPtr, false, transformaP);
-    gl.drawElements(gl.TRIANGLES, pyramid.indices.length, gl.UNSIGNED_SHORT, 0);
+    gl.uniformMatrix4fv(transfPtr, false, matrotY);
+    gl.drawElements(gl.TRIANGLES, sphere.indices.length, gl.UNSIGNED_SHORT, 0);
 
-    angleP += 1;
-    angleC += 2;
+    angle += 2;
 
     requestAnimationFrame(draw);
   }
