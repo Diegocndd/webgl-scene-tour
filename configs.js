@@ -232,42 +232,38 @@ export function cubeConfigs(width, centerX, centerY, centerZ) {
   };
 }
 
-export function sphereConfigs() {
-  // Vertices da esfera
+function sphere2mapUV_Equirectangular(p) {
+  return [Math.atan2(p[0], -p[2]) / (2 * Math.PI) + 0.5, p[1] * 0.5 + 0.5];
+}
+
+export function sphereConfigs(longitudeSegments, latitudeSegments, radius) {
   const vertices = [];
   const indices = [];
-  const numLongitudes = 50;
-  const numLatitudes = 50;
-  const radius = 0.5;
 
-  for (let lat = 0; lat <= numLatitudes; lat++) {
-    const theta = (lat * Math.PI) / numLatitudes;
+  for (let lat = 0; lat <= latitudeSegments; lat++) {
+    const theta = (lat * Math.PI) / latitudeSegments;
     const sinTheta = Math.sin(theta);
     const cosTheta = Math.cos(theta);
 
-    for (let lon = 0; lon <= numLongitudes; lon++) {
-      const phi = (lon * 2 * Math.PI) / numLongitudes;
+    for (let lon = 0; lon <= longitudeSegments; lon++) {
+      const phi = (lon * 2 * Math.PI) / longitudeSegments;
       const sinPhi = Math.sin(phi);
       const cosPhi = Math.cos(phi);
 
       const x = cosPhi * sinTheta;
       const y = cosTheta;
       const z = sinPhi * sinTheta;
+      const u = 1 - lon / longitudeSegments;
+      const v = 1 - lat / latitudeSegments;
 
-      vertices.push(radius * x, radius * y, radius * z, 1.0);
-      if (lon % 2 === 0) {
-        vertices.push(1.0, 1.0, 0.0, 1.0);
-      } else {
-        vertices.push(1.0, 0.0, 1.0, 1.0);
-      }
+      vertices.push(radius * x, radius * y, radius * z, 1.0, u, v);
     }
   }
 
-  // Criando os índices para renderizar a esfera como triângulos
-  for (let lat = 0; lat < numLatitudes; lat++) {
-    for (let lon = 0; lon < numLongitudes; lon++) {
-      const first = lat * (numLongitudes + 1) + lon;
-      const second = first + numLongitudes + 1;
+  for (let lat = 0; lat < latitudeSegments; lat++) {
+    for (let lon = 0; lon < longitudeSegments; lon++) {
+      const first = lat * (longitudeSegments + 1) + lon;
+      const second = first + longitudeSegments + 1;
 
       indices.push(first, second, first + 1);
       indices.push(second, second + 1, first + 1);
@@ -276,3 +272,43 @@ export function sphereConfigs() {
 
   return { vertices, indices };
 }
+
+// export function sphereConfigs(longitudeSegments, latitudeSegments, radius) {
+//   const vertices = [];
+//   const indices = [];
+//   const uvs = [];
+
+//   for (let lat = 0; lat <= latitudeSegments; lat++) {
+//     const theta = (lat * Math.PI) / latitudeSegments;
+//     const sinTheta = Math.sin(theta);
+//     const cosTheta = Math.cos(theta);
+
+//     for (let lon = 0; lon <= longitudeSegments; lon++) {
+//       const phi = (lon * 2 * Math.PI) / longitudeSegments;
+//       const sinPhi = Math.sin(phi);
+//       const cosPhi = Math.cos(phi);
+
+//       const x = cosPhi * sinTheta;
+//       const y = cosTheta;
+//       const z = sinPhi * sinTheta;
+//       const w = 1.0;
+
+//       const u = 1 - lon / longitudeSegments;
+//       const v = 1 - lat / latitudeSegments;
+
+//       vertices.push(radius * x, radius * y, radius * z, w, u, v);
+//     }
+//   }
+
+//   for (let lat = 0; lat < latitudeSegments; lat++) {
+//     for (let lon = 0; lon < longitudeSegments; lon++) {
+//       const first = lat * (longitudeSegments + 1) + lon;
+//       const second = first + longitudeSegments + 1;
+
+//       indices.push(first, second, first + 1);
+//       indices.push(second, second + 1, first + 1);
+//     }
+//   }
+
+//   return { vertices, indices };
+// }
