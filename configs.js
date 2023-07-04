@@ -1,0 +1,539 @@
+export function pyramidConfigs(width, height, centerX, centerY, centerZ) {
+  const halfWidth = width / 2;
+  const halfHeight = height / 2;
+
+  const vertices = [
+    // Base
+    centerX - halfWidth,
+    centerY - halfHeight,
+    centerZ - halfWidth,
+    1.0,
+    1.0,
+    0.0,
+    0.0,
+    1.0, // V0
+    centerX + halfWidth,
+    centerY - halfHeight,
+    centerZ - halfWidth,
+    1.0,
+    0.0,
+    1.0,
+    0.0,
+    1.0, // V1
+    centerX + halfWidth,
+    centerY - halfHeight,
+    centerZ + halfWidth,
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    1.0, // V2
+    centerX - halfWidth,
+    centerY - halfHeight,
+    centerZ + halfWidth,
+    1.0,
+    1.0,
+    1.0,
+    0.0,
+    1.0, // V3
+
+    // Topo
+    centerX,
+    centerY + halfHeight,
+    centerZ,
+    1.0,
+    0.0,
+    1.0,
+    0.0,
+    1.0, // V4
+  ];
+
+  const indices = [
+    // Base
+    0, 1, 2, 0, 2, 3,
+
+    // Faces laterais
+    0, 1, 4, 1, 2, 4, 2, 3, 4, 3, 0, 4,
+  ];
+
+  return {
+    vertices,
+    indices,
+  };
+}
+
+export function cubeConfigs(width, centerX, centerY, centerZ) {
+  const halfWidth = width / 2;
+
+  const vertices = [
+    // Frente
+    centerX - halfWidth,
+    centerY - halfWidth,
+    centerZ + halfWidth,
+    1.0,
+    1.0,
+    0.0,
+    0.0,
+    1.0, // V0
+    centerX + halfWidth,
+    centerY - halfWidth,
+    centerZ + halfWidth,
+    1.0,
+    0.0,
+    1.0,
+    0.0,
+    1.0, // V1
+    centerX + halfWidth,
+    centerY + halfWidth,
+    centerZ + halfWidth,
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    1.0, // V2
+    centerX - halfWidth,
+    centerY + halfWidth,
+    centerZ + halfWidth,
+    1.0,
+    1.0,
+    1.0,
+    0.0,
+    1.0, // V3
+
+    // Trás
+    centerX - halfWidth,
+    centerY - halfWidth,
+    centerZ - halfWidth,
+    1.0,
+    1.0,
+    0.0,
+    0.0,
+    1.0, // V4
+    centerX + halfWidth,
+    centerY - halfWidth,
+    centerZ - halfWidth,
+    1.0,
+    0.0,
+    1.0,
+    0.0,
+    1.0, // V5
+    centerX + halfWidth,
+    centerY + halfWidth,
+    centerZ - halfWidth,
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    1.0, // V6
+    centerX - halfWidth,
+    centerY + halfWidth,
+    centerZ - halfWidth,
+    1.0,
+    1.0,
+    1.0,
+    0.0,
+    1.0, // V7
+
+    // Topo
+    centerX - halfWidth,
+    centerY + halfWidth,
+    centerZ + halfWidth,
+    1.0,
+    1.0,
+    0.0,
+    0.0,
+    1.0, // V8
+    centerX + halfWidth,
+    centerY + halfWidth,
+    centerZ + halfWidth,
+    1.0,
+    0.0,
+    1.0,
+    0.0,
+    1.0, // V9
+    centerX + halfWidth,
+    centerY + halfWidth,
+    centerZ - halfWidth,
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    1.0, // V10
+    centerX - halfWidth,
+    centerY + halfWidth,
+    centerZ - halfWidth,
+    1.0,
+    1.0,
+    1.0,
+    0.0,
+    1.0, // V11
+
+    // Base
+    centerX - halfWidth,
+    centerY - halfWidth,
+    centerZ + halfWidth,
+    1.0,
+    1.0,
+    0.0,
+    0.0,
+    1.0, // V12
+    centerX + halfWidth,
+    centerY - halfWidth,
+    centerZ + halfWidth,
+    1.0,
+    0.0,
+    1.0,
+    0.0,
+    1.0, // V13
+    centerX + halfWidth,
+    centerY - halfWidth,
+    centerZ - halfWidth,
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    1.0, // V14
+    centerX - halfWidth,
+    centerY - halfWidth,
+    centerZ - halfWidth,
+    1.0,
+    1.0,
+    1.0,
+    0.0,
+    1.0, // V15
+  ];
+
+  const indices = [
+    // Frente
+    0, 1, 2, 0, 2, 3,
+
+    // Trás
+    4, 5, 6, 4, 6, 7,
+
+    // Topo
+    8, 9, 10, 8, 10, 11,
+
+    // Base
+    12, 13, 14, 12, 14, 15,
+
+    // Lados
+    0, 1, 5, 0, 5, 4,
+
+    1, 2, 6, 1, 6, 5,
+
+    2, 3, 7, 2, 7, 6,
+
+    3, 0, 4, 3, 4, 7,
+  ];
+
+  return {
+    vertices,
+    indices,
+  };
+}
+
+// export function cubeConfigs(width) {
+//   const halfWidth = width / 2;
+
+//   const vertices = [
+//     // Face frontal
+//     -halfWidth,
+//     -halfWidth,
+//     halfWidth,
+//     1.0,
+//     1.0,
+//     0.0,
+//     0.0,
+//     1.0, // V0
+//     halfWidth,
+//     -halfWidth,
+//     halfWidth,
+//     1.0,
+//     0.0,
+//     1.0,
+//     0.0,
+//     1.0, // V1
+//     halfWidth,
+//     halfWidth,
+//     halfWidth,
+//     1.0,
+//     0.0,
+//     0.0,
+//     1.0,
+//     1.0, // V2
+//     -halfWidth,
+//     halfWidth,
+//     halfWidth,
+//     1.0,
+//     1.0,
+//     1.0,
+//     0.0,
+//     1.0, // V3
+
+//     // Face traseira
+//     -halfWidth,
+//     -halfWidth,
+//     -halfWidth,
+//     1.0,
+//     1.0,
+//     0.0,
+//     0.0,
+//     1.0, // V4
+//     halfWidth,
+//     -halfWidth,
+//     -halfWidth,
+//     1.0,
+//     0.0,
+//     1.0,
+//     0.0,
+//     1.0, // V5
+//     halfWidth,
+//     halfWidth,
+//     -halfWidth,
+//     1.0,
+//     0.0,
+//     0.0,
+//     1.0,
+//     1.0, // V6
+//     -halfWidth,
+//     halfWidth,
+//     -halfWidth,
+//     1.0,
+//     1.0,
+//     1.0,
+//     0.0,
+//     1.0, // V7
+
+//     // Face superior
+//     -halfWidth,
+//     halfWidth,
+//     halfWidth,
+//     1.0,
+//     1.0,
+//     0.0,
+//     0.0,
+//     1.0, // V3
+//     halfWidth,
+//     halfWidth,
+//     halfWidth,
+//     1.0,
+//     0.0,
+//     1.0,
+//     0.0,
+//     1.0, // V2
+//     halfWidth,
+//     halfWidth,
+//     -halfWidth,
+//     1.0,
+//     0.0,
+//     0.0,
+//     1.0,
+//     1.0, // V6
+//     -halfWidth,
+//     halfWidth,
+//     -halfWidth,
+//     1.0,
+//     1.0,
+//     1.0,
+//     0.0,
+//     1.0, // V7
+
+//     // Face inferior
+//     -halfWidth,
+//     -halfWidth,
+//     halfWidth,
+//     1.0,
+//     1.0,
+//     0.0,
+//     0.0,
+//     1.0, // V0
+//     halfWidth,
+//     -halfWidth,
+//     halfWidth,
+//     1.0,
+//     0.0,
+//     1.0,
+//     0.0,
+//     1.0, // V1
+//     halfWidth,
+//     -halfWidth,
+//     -halfWidth,
+//     1.0,
+//     0.0,
+//     0.0,
+//     1.0,
+//     1.0, // V5
+//     -halfWidth,
+//     -halfWidth,
+//     -halfWidth,
+//     1.0,
+//     1.0,
+//     1.0,
+//     0.0,
+//     1.0, // V4
+
+//     // Face lateral esquerda
+//     -halfWidth,
+//     -halfWidth,
+//     halfWidth,
+//     1.0,
+//     1.0,
+//     0.0,
+//     0.0,
+//     1.0, // V0
+//     -halfWidth,
+//     halfWidth,
+//     halfWidth,
+//     1.0,
+//     0.0,
+//     1.0,
+//     0.0,
+//     1.0, // V3
+//     -halfWidth,
+//     halfWidth,
+//     -halfWidth,
+//     1.0,
+//     0.0,
+//     0.0,
+//     1.0,
+//     1.0, // V7
+//     -halfWidth,
+//     -halfWidth,
+//     -halfWidth,
+//     1.0,
+//     1.0,
+//     1.0,
+//     0.0,
+//     1.0, // V4
+
+//     // Face lateral direita
+//     halfWidth,
+//     -halfWidth,
+//     halfWidth,
+//     1.0,
+//     1.0,
+//     0.0,
+//     0.0,
+//     1.0, // V1
+//     halfWidth,
+//     halfWidth,
+//     halfWidth,
+//     1.0,
+//     0.0,
+//     1.0,
+//     0.0,
+//     1.0, // V2
+//     halfWidth,
+//     halfWidth,
+//     -halfWidth,
+//     1.0,
+//     0.0,
+//     0.0,
+//     1.0,
+//     1.0, // V6
+//     halfWidth,
+//     -halfWidth,
+//     -halfWidth,
+//     1.0,
+//     1.0,
+//     1.0,
+//     0.0,
+//     1.0, // V5
+//   ];
+
+//   const indices = [
+//     0,
+//     1,
+//     2, // Triângulo frontal 1
+//     0,
+//     2,
+//     3, // Triângulo frontal 2
+
+//     4,
+//     5,
+//     6, // Triângulo traseiro 1
+//     4,
+//     6,
+//     7, // Triângulo traseiro 2
+
+//     8,
+//     9,
+//     10, // Triângulo superior 1
+//     8,
+//     10,
+//     11, // Triângulo superior 2
+
+//     12,
+//     13,
+//     14, // Triângulo inferior 1
+//     12,
+//     14,
+//     15, // Triângulo inferior 2
+
+//     16,
+//     17,
+//     18, // Triângulo lateral esquerda 1
+//     16,
+//     18,
+//     19, // Triângulo lateral esquerda 2
+
+//     20,
+//     21,
+//     22, // Triângulo lateral direita 1
+//     20,
+//     22,
+//     23, // Triângulo lateral direita 2
+//   ];
+
+//   return {
+//     vertices,
+//     indices,
+//   };
+// }
+
+// Exemplo de uso
+
+export function sphereConfigs() {
+  // Vertices da esfera
+  const vertices = [];
+  const indices = [];
+  const numLongitudes = 50;
+  const numLatitudes = 50;
+  const radius = 0.5;
+
+  for (let lat = 0; lat <= numLatitudes; lat++) {
+    const theta = (lat * Math.PI) / numLatitudes;
+    const sinTheta = Math.sin(theta);
+    const cosTheta = Math.cos(theta);
+
+    for (let lon = 0; lon <= numLongitudes; lon++) {
+      const phi = (lon * 2 * Math.PI) / numLongitudes;
+      const sinPhi = Math.sin(phi);
+      const cosPhi = Math.cos(phi);
+
+      const x = cosPhi * sinTheta;
+      const y = cosTheta;
+      const z = sinPhi * sinTheta;
+
+      vertices.push(radius * x, radius * y, radius * z, 1.0);
+      if (lon % 2 === 0) {
+        vertices.push(1.0, 1.0, 0.0, 1.0);
+      } else {
+        vertices.push(1.0, 0.0, 1.0, 1.0);
+      }
+    }
+  }
+
+  // Criando os índices para renderizar a esfera como triângulos
+  for (let lat = 0; lat < numLatitudes; lat++) {
+    for (let lon = 0; lon < numLongitudes; lon++) {
+      const first = lat * (numLongitudes + 1) + lon;
+      const second = first + numLongitudes + 1;
+
+      indices.push(first, second, first + 1);
+      indices.push(second, second + 1, first + 1);
+    }
+  }
+
+  return { vertices, indices };
+}
