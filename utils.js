@@ -90,6 +90,32 @@ export function createCamera(pos, target, up) {
   const cam = math.multiply(mt, mov);
 
   return cam;
+  // Calcule o vetor de direção da câmera
+  // const zc = math.subtract(cameraPosition, target);
+  // const zcNormalized = math.divide(zc, math.norm(zc));
+
+  // // Calcule o vetor lateral
+  // const xc = math.cross(up, zcNormalized);
+  // const xcNormalized = math.divide(xc, math.norm(xc));
+
+  // // Calcule o vetor "para cima" corrigido
+  // const yc = math.cross(zcNormalized, xcNormalized);
+  // const ycNormalized = math.divide(yc, math.norm(yc));
+
+  // // Crie a matriz View
+  // const viewMatrix = math.matrix([
+  //   [xcNormalized[0], ycNormalized[0], zcNormalized[0], 0],
+  //   [xcNormalized[1], ycNormalized[1], zcNormalized[1], 0],
+  //   [xcNormalized[2], ycNormalized[2], zcNormalized[2], 0],
+  //   [
+  //     -math.dot(xcNormalized, cameraPosition),
+  //     -math.dot(ycNormalized, cameraPosition),
+  //     -math.dot(zcNormalized, cameraPosition),
+  //     1,
+  //   ],
+  // ]);
+
+  // return viewMatrix;
 }
 
 export function createPerspective(fovy, aspect, near, far) {
@@ -108,4 +134,16 @@ export function createPerspective(fovy, aspect, near, far) {
   ]);
 
   return proj;
+  const fovRad = math.unit(fov, "deg");
+  const f = 1 / math.tan(fovRad / 2);
+  const nf = 1 / (near - far);
+
+  const projectionMatrix = math.matrix([
+    [f / aspectRatio, 0, 0, 0],
+    [0, f, 0, 0],
+    [0, 0, (far + near) * nf, -1],
+    [0, 0, 2 * far * near * nf, 0],
+  ]);
+
+  return projectionMatrix;
 }

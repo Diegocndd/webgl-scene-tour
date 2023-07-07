@@ -256,7 +256,7 @@ export function sphereConfigs(longitudeSegments, latitudeSegments, radius) {
       const u = 1 - lon / longitudeSegments;
       const v = 1 - lat / latitudeSegments;
 
-      vertices.push(radius * x, radius * y, radius * z, 1.0, u, v);
+      vertices.push(radius * x, radius * y, radius * z, u, v);
     }
   }
 

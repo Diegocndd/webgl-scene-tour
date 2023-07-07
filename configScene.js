@@ -65,16 +65,16 @@ export function createSphere(gl, prog, vertices, indices, tex) {
   gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
   gl.vertexAttribPointer(
     positionAttributeLocation,
-    4,
+    3,
     gl.FLOAT,
     false,
-    6 * 4,
+    5 * 4,
     0
   );
 
   var texcoordPtr = gl.getAttribLocation(prog, "texCoord");
   gl.enableVertexAttribArray(texcoordPtr);
-  gl.vertexAttribPointer(texcoordPtr, 2, gl.FLOAT, false, 6 * 4, 4 * 4);
+  gl.vertexAttribPointer(texcoordPtr, 2, gl.FLOAT, false, 5 * 4, 3 * 4);
 
   var tex0 = gl.createTexture();
   gl.activeTexture(gl.TEXTURE0);
