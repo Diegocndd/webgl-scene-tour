@@ -51,7 +51,7 @@ export function createProgram(gl, vtxShader, fragShader) {
 export function initOpenGL(gl) {
   // inicializa área de desenho
   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-  gl.clearColor(0, 0, 0, 1);
+  // gl.clearColor(0, 0, 0, 1);
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
   // habilita canal alpha
