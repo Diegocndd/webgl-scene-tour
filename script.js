@@ -68,68 +68,229 @@ document.addEventListener("keydown", function (event) {
   console.log(camZ);
 });
 
-const imageUrls = ["assets/earth.jpg", "assets/moon.jpg", "assets/sun.png"];
+const getMatRotY = (x, y, z) => {
+  // volta o objeto pra origem (0,0)
+  const translationToOrigin = math.matrix([
+    [1, 0, 0, -x],
+    [0, 1, 0, -y],
+    [0, 0, 1, -z],
+    [0, 0, 0, 1],
+  ]);
+
+  // rotaciona em torno do eixo y
+  const rotationMatrix = math.matrix([
+    [Math.cos(angle), 0, -Math.sin(angle), 0],
+    [0, 1, 0, 0],
+    [Math.sin(angle), 0, Math.cos(angle), 0],
+    [0, 0, 0, 1],
+  ]);
+
+  // retorna à posição certa
+  const translationBack = math.matrix([
+    [1, 0, 0, x],
+    [0, 1, 0, y],
+    [0, 0, 1, z],
+    [0, 0, 0, 1],
+  ]);
+
+  return math.multiply(
+    math.multiply(translationBack, rotationMatrix),
+    translationToOrigin
+  );
+};
+
+const imageUrls = [
+  "assets/earth.jpg",
+  "assets/moon.jpg",
+  "assets/sun.png",
+  "assets/mercury.jpg",
+  "assets/venus.jpg",
+  "assets/mars.jpg",
+  "assets/jupiter.jpg",
+  "assets/saturn.jpg",
+  "assets/uranus.jpg",
+  "assets/neptune.jpg",
+];
+
 const images = [];
 
 async function allImagesLoaded() {
-  const prog1 = await buildSphere(gl);
-  const sphere = sphereConfigs(25, 25, 0.5, 0, 0, 0);
+  const objects = [
+    {
+      name: "sun",
+      longitude: 20,
+      latitude: 20,
+      radius: 2,
+      x: -5,
+      y: 0,
+      z: 0,
+      texture: images[2],
+    },
+    {
+      name: "mercury",
+      longitude: 20,
+      latitude: 20,
+      radius: 0.35,
+      x: -1.5,
+      y: 0,
+      z: 0,
+      texture: images[3],
+    },
+    {
+      name: "venus",
+      longitude: 20,
+      latitude: 20,
+      radius: 0.5,
+      x: 0.2,
+      y: 0,
+      z: 0,
+      texture: images[4],
+    },
+    {
+      name: "earth",
+      longitude: 25,
+      latitude: 25,
+      radius: 0.5,
+      x: 2,
+      y: 0,
+      z: 0,
+      texture: images[0],
+    },
+    {
+      name: "moon",
+      longitude: 20,
+      latitude: 20,
+      radius: 0.1,
+      x: 2.8,
+      y: 0,
+      z: 0,
+      texture: images[3],
+    },
+    {
+      name: "mars",
+      longitude: 20,
+      latitude: 20,
+      radius: 0.5,
+      x: 4,
+      y: 0,
+      z: 0,
+      texture: images[5],
+    },
+    {
+      name: "jupiter",
+      longitude: 20,
+      latitude: 20,
+      radius: 0.8,
+      x: 6,
+      y: 0,
+      z: 0,
+      texture: images[6],
+    },
+    {
+      name: "saturn",
+      longitude: 20,
+      latitude: 20,
+      radius: 0.6,
+      x: 9,
+      y: 0,
+      z: 0,
+      texture: images[7],
+    },
+    {
+      name: "uranus",
+      longitude: 20,
+      latitude: 20,
+      radius: 0.4,
+      x: 12,
+      y: 0,
+      z: 0,
+      texture: images[8],
+    },
+    {
+      name: "neptune",
+      longitude: 20,
+      latitude: 20,
+      radius: 0.4,
+      x: 15,
+      y: 0,
+      z: 0,
+      texture: images[9],
+    },
+  ];
 
-  const prog2 = await buildSphere(gl);
-  const moon = sphereConfigs(20, 20, 0.2, 1, 0, 0);
+  const progs = [];
+  const spheres = [];
 
-  const prog3 = await buildSphere(gl);
-  const sun = sphereConfigs(20, 20, 1, -4, 0, 0);
-
-  function draw() {
-    initOpenGL(gl);
-
-    const mproj = createPerspective(
-      30,
-      gl.canvas.width / gl.canvas.height,
-      1,
-      50
+  const promises = objects.map(async (obj) => {
+    const prog = await buildSphere(gl);
+    const sphere = sphereConfigs(
+      obj.longitude,
+      obj.latitude,
+      obj.radius,
+      obj.x,
+      obj.y,
+      obj.z
     );
-    const cam = createCamera([camX, camY, camZ], [look, camY, 0], [0, 60, 0]);
 
-    createSphere(gl, prog1, sphere.vertices, sphere.indices, images[0]);
+    progs.push(prog);
+    spheres.push(sphere);
+  });
 
-    let transforma = math.multiply(mproj, cam);
-    transforma = math.flatten(math.transpose(transforma))._data;
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+  await Promise.all(promises);
 
-    gl.useProgram(prog1);
-    const transfPtr = gl.getUniformLocation(prog1, "transf");
-    gl.uniformMatrix4fv(transfPtr, false, transforma);
-    gl.drawElements(gl.TRIANGLES, sphere.indices.length, gl.UNSIGNED_SHORT, 0);
+  let lastFrameTime = 0; // Variável para armazenar o tempo do último quadro
 
-    /////////////
+  function draw(currentTime) {
+    initOpenGL(gl);
+    const deltaTime = (currentTime - lastFrameTime) / 1000; // Converter para segundos
 
-    createSphere(gl, prog2, moon.vertices, moon.indices, images[1]);
+    objects.forEach((obj, index) => {
+      const currProg = progs[index];
+      const currSphere = spheres[index];
 
-    gl.useProgram(prog2);
-    let transforma2 = math.multiply(mproj, cam);
-    transforma2 = math.flatten(math.transpose(transforma2))._data;
-    // gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+      let matrotY = getMatRotY(obj.x, obj.y, obj.z);
 
-    const transfPtr2 = gl.getUniformLocation(prog2, "transf");
-    gl.uniformMatrix4fv(transfPtr2, false, transforma2);
-    gl.drawElements(gl.TRIANGLES, moon.indices.length, gl.UNSIGNED_SHORT, 0);
+      const dx = obj.x - objects[0].x;
+      const dy = obj.y - objects[0].y;
+      const dz = obj.z - objects[0].z;
 
-    /////////////
+      const mproj = createPerspective(
+        30,
+        gl.canvas.width / gl.canvas.height,
+        1,
+        50
+      );
+      const cam = createCamera([camX, camY, camZ], [look, 0, 0], [0, 300, 0]);
 
-    createSphere(gl, prog3, sun.vertices, sun.indices, images[2]);
+      createSphere(
+        gl,
+        currProg,
+        currSphere.vertices,
+        currSphere.indices,
+        obj.texture
+      );
 
-    gl.useProgram(prog3);
-    let transforma3 = math.multiply(mproj, cam);
-    transforma3 = math.flatten(math.transpose(transforma3))._data;
+      let transforma = math.multiply(cam, matrotY);
+      transforma = math.multiply(mproj, transforma);
+      transforma = math.flatten(math.transpose(transforma))._data;
 
-    const transfPtr3 = gl.getUniformLocation(prog3, "transf");
-    gl.uniformMatrix4fv(transfPtr3, false, transforma3);
-    gl.drawElements(gl.TRIANGLES, sun.indices.length, gl.UNSIGNED_SHORT, 0);
+      if (index === 0) gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    // camX += 0.01;
-    // camY -= 0.01;
+      gl.useProgram(currProg);
+      const transfPtr = gl.getUniformLocation(currProg, "transf");
+      gl.uniformMatrix4fv(transfPtr, false, transforma);
+      gl.drawElements(
+        gl.TRIANGLES,
+        currSphere.indices.length,
+        gl.UNSIGNED_SHORT,
+        0
+      );
+    });
+
+    angle += 0.1;
+
+    lastFrameTime = currentTime;
+
     requestAnimationFrame(draw);
   }
 
@@ -154,10 +315,3 @@ imageUrls.forEach((imageUrl) => {
   images.push(img);
   img.src = imageUrl;
 });
-
-// TEXTIMG = new Image();
-// TEXTIMG.crossOrigin = "anonymous";
-// TEXTIMG.src = "assets/earth.jpg";
-// TEXTIMG.onload = async function () {
-
-// };
