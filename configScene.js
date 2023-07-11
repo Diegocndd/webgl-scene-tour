@@ -1,5 +1,3 @@
-import { initOpenGL } from "./utils.js";
-
 export function createPyramid(gl, prog, coords, indices) {
   const buffPtr = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, buffPtr);
