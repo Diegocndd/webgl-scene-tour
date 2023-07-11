@@ -1,12 +1,11 @@
-import { buildSphere, buildCube, buildPyramid } from "./builds.js";
-import { createSphere, createCube, createPyramid } from "./configScene.js";
-import { cubeConfigs, pyramidConfigs, sphereConfigs } from "./configs.js";
+import { buildSphere } from "./builds.js";
+import { createSphere } from "./configScene.js";
+import { sphereConfigs } from "./configs.js";
 import {
   createCamera,
   createPerspective,
-  createProgram,
   initOpenGL,
-  loadGLSL,
+  objects,
 } from "./utils.js";
 let camX = 0;
 let camY = 0;
@@ -115,113 +114,10 @@ const imageUrls = [
 const images = [];
 
 async function allImagesLoaded() {
-  const objects = [
-    {
-      name: "sun",
-      longitude: 20,
-      latitude: 20,
-      radius: 2,
-      x: -5,
-      y: 0,
-      z: 0,
-      texture: images[2],
-    },
-    {
-      name: "mercury",
-      longitude: 20,
-      latitude: 20,
-      radius: 0.35,
-      x: -1.5,
-      y: 0,
-      z: 0,
-      texture: images[3],
-    },
-    {
-      name: "venus",
-      longitude: 20,
-      latitude: 20,
-      radius: 0.5,
-      x: 0.2,
-      y: 0,
-      z: 0,
-      texture: images[4],
-    },
-    {
-      name: "earth",
-      longitude: 25,
-      latitude: 25,
-      radius: 0.5,
-      x: 2,
-      y: 0,
-      z: 0,
-      texture: images[0],
-    },
-    {
-      name: "moon",
-      longitude: 20,
-      latitude: 20,
-      radius: 0.1,
-      x: 2.8,
-      y: 0,
-      z: 0,
-      texture: images[3],
-    },
-    {
-      name: "mars",
-      longitude: 20,
-      latitude: 20,
-      radius: 0.5,
-      x: 4,
-      y: 0,
-      z: 0,
-      texture: images[5],
-    },
-    {
-      name: "jupiter",
-      longitude: 20,
-      latitude: 20,
-      radius: 0.8,
-      x: 6,
-      y: 0,
-      z: 0,
-      texture: images[6],
-    },
-    {
-      name: "saturn",
-      longitude: 20,
-      latitude: 20,
-      radius: 0.6,
-      x: 9,
-      y: 0,
-      z: 0,
-      texture: images[7],
-    },
-    {
-      name: "uranus",
-      longitude: 20,
-      latitude: 20,
-      radius: 0.4,
-      x: 12,
-      y: 0,
-      z: 0,
-      texture: images[8],
-    },
-    {
-      name: "neptune",
-      longitude: 20,
-      latitude: 20,
-      radius: 0.4,
-      x: 15,
-      y: 0,
-      z: 0,
-      texture: images[9],
-    },
-  ];
-
   const progs = [];
   const spheres = [];
 
-  const promises = objects.map(async (obj) => {
+  const promises = objects(images).map(async (obj) => {
     const prog = await buildSphere(gl);
     const sphere = sphereConfigs(
       obj.longitude,
@@ -244,15 +140,15 @@ async function allImagesLoaded() {
     initOpenGL(gl);
     const deltaTime = (currentTime - lastFrameTime) / 1000; // Converter para segundos
 
-    objects.forEach((obj, index) => {
+    objects(images).forEach((obj, index) => {
       const currProg = progs[index];
       const currSphere = spheres[index];
 
       let matrotY = getMatRotY(obj.x, obj.y, obj.z);
 
-      const dx = obj.x - objects[0].x;
-      const dy = obj.y - objects[0].y;
-      const dz = obj.z - objects[0].z;
+      const dx = obj.x - objects(images)[0].x;
+      const dy = obj.y - objects(images)[0].y;
+      const dz = obj.z - objects(images)[0].z;
 
       const mproj = createPerspective(
         30,

@@ -1,3 +1,108 @@
+export const objects = (images) => {
+  return [
+    {
+      name: "sun",
+      longitude: 20,
+      latitude: 20,
+      radius: 2,
+      x: -5,
+      y: 0,
+      z: 2,
+      texture: images[2],
+    },
+    {
+      name: "mercury",
+      longitude: 20,
+      latitude: 20,
+      radius: 0.35,
+      x: -1.5,
+      y: 0.5,
+      z: 7,
+      texture: images[3],
+    },
+    {
+      name: "venus",
+      longitude: 20,
+      latitude: 20,
+      radius: 0.5,
+      x: 0.2,
+      y: -0.5,
+      z: 4,
+      texture: images[4],
+    },
+    {
+      name: "earth",
+      longitude: 25,
+      latitude: 25,
+      radius: 0.5,
+      x: 2,
+      y: 0,
+      z: 1,
+      texture: images[0],
+    },
+    {
+      name: "moon",
+      longitude: 20,
+      latitude: 20,
+      radius: 0.1,
+      x: 2.8,
+      y: 0,
+      z: 1,
+      texture: images[3],
+    },
+    {
+      name: "mars",
+      longitude: 20,
+      latitude: 20,
+      radius: 0.5,
+      x: 4,
+      y: 0.2,
+      z: 0,
+      texture: images[5],
+    },
+    {
+      name: "jupiter",
+      longitude: 20,
+      latitude: 20,
+      radius: 0.8,
+      x: 6,
+      y: 0,
+      z: 0,
+      texture: images[6],
+    },
+    {
+      name: "saturn",
+      longitude: 20,
+      latitude: 20,
+      radius: 0.6,
+      x: 9,
+      y: 0,
+      z: 0,
+      texture: images[7],
+    },
+    {
+      name: "uranus",
+      longitude: 20,
+      latitude: 20,
+      radius: 0.4,
+      x: 12,
+      y: 1,
+      z: 0,
+      texture: images[8],
+    },
+    {
+      name: "neptune",
+      longitude: 20,
+      latitude: 20,
+      radius: 0.4,
+      x: 15,
+      y: 0.7,
+      z: 0,
+      texture: images[9],
+    },
+  ];
+};
+
 export async function loadGLSL(folder) {
   let vertexCode = "";
   let fragCode = "";
@@ -90,32 +195,6 @@ export function createCamera(pos, target, up) {
   const cam = math.multiply(mt, mov);
 
   return cam;
-  // Calcule o vetor de direção da câmera
-  // const zc = math.subtract(cameraPosition, target);
-  // const zcNormalized = math.divide(zc, math.norm(zc));
-
-  // // Calcule o vetor lateral
-  // const xc = math.cross(up, zcNormalized);
-  // const xcNormalized = math.divide(xc, math.norm(xc));
-
-  // // Calcule o vetor "para cima" corrigido
-  // const yc = math.cross(zcNormalized, xcNormalized);
-  // const ycNormalized = math.divide(yc, math.norm(yc));
-
-  // // Crie a matriz View
-  // const viewMatrix = math.matrix([
-  //   [xcNormalized[0], ycNormalized[0], zcNormalized[0], 0],
-  //   [xcNormalized[1], ycNormalized[1], zcNormalized[1], 0],
-  //   [xcNormalized[2], ycNormalized[2], zcNormalized[2], 0],
-  //   [
-  //     -math.dot(xcNormalized, cameraPosition),
-  //     -math.dot(ycNormalized, cameraPosition),
-  //     -math.dot(zcNormalized, cameraPosition),
-  //     1,
-  //   ],
-  // ]);
-
-  // return viewMatrix;
 }
 
 export function createPerspective(fovy, aspect, near, far) {
