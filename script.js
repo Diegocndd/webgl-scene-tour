@@ -25,22 +25,16 @@ gl.clear(gl.COLOR_BUFFER_BIT);
 document.addEventListener("keydown", function (event) {
   switch (event.key) {
     case "ArrowLeft":
-      look += 0.1;
+      look -= 0.1;
       break;
     case "ArrowRight":
-      look -= 0.1;
+      look += 0.1;
       break;
     case "ArrowUp":
       camY += 0.1;
       break;
     case "ArrowDown":
       camY -= 0.1;
-      break;
-    case "a":
-      look -= 0.1;
-      break;
-    case "d":
-      look += 0.1;
       break;
     case "s":
       let aux = Math.round((camZ + 0.1) * 100) / 100;
