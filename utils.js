@@ -5,9 +5,9 @@ export const objects = (images) => {
       longitude: 20,
       latitude: 20,
       radius: 2,
-      x: -5,
+      x: -7,
       y: 0,
-      z: 2,
+      z: 0,
       texture: images[2],
     },
     {
@@ -17,7 +17,7 @@ export const objects = (images) => {
       radius: 0.35,
       x: -1.5,
       y: 0.5,
-      z: 7,
+      z: -5,
       texture: images[3],
     },
     {

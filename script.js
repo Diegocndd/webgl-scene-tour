@@ -7,6 +7,7 @@ import {
   initOpenGL,
   objects,
 } from "./utils.js";
+
 let camX = 0;
 let camY = 0;
 let camZ = 20;
@@ -22,9 +23,6 @@ gl.clearColor(0.0, 0.0, 0.0, 0.0);
 gl.clear(gl.COLOR_BUFFER_BIT);
 
 document.addEventListener("keydown", function (event) {
-  var arrowKey = "";
-  console.log(event.key);
-  // Verifica se a tecla pressionada é uma das setas
   switch (event.key) {
     case "ArrowLeft":
       look += 0.1;
@@ -40,12 +38,9 @@ document.addEventListener("keydown", function (event) {
       break;
     case "a":
       look -= 0.1;
-      // camX += 0.1;
-      arrowKey = "Seta para a esquerda";
       break;
     case "d":
       look += 0.1;
-      arrowKey = "Seta para a direita";
       break;
     case "s":
       let aux = Math.round((camZ + 0.1) * 100) / 100;
@@ -61,10 +56,8 @@ document.addEventListener("keydown", function (event) {
       break;
 
     default:
-      // Se não for uma seta, não faz nada
       return;
   }
-  console.log(camZ);
 });
 
 const getMatRotY = (x, y, z) => {
@@ -125,7 +118,8 @@ async function allImagesLoaded() {
       obj.radius,
       obj.x,
       obj.y,
-      obj.z
+      obj.z,
+      angle
     );
 
     progs.push(prog);
@@ -134,21 +128,14 @@ async function allImagesLoaded() {
 
   await Promise.all(promises);
 
-  let lastFrameTime = 0; // Variável para armazenar o tempo do último quadro
-
-  function draw(currentTime) {
+  function draw() {
     initOpenGL(gl);
-    const deltaTime = (currentTime - lastFrameTime) / 1000; // Converter para segundos
 
     objects(images).forEach((obj, index) => {
       const currProg = progs[index];
       const currSphere = spheres[index];
 
       let matrotY = getMatRotY(obj.x, obj.y, obj.z);
-
-      const dx = obj.x - objects(images)[0].x;
-      const dy = obj.y - objects(images)[0].y;
-      const dz = obj.z - objects(images)[0].z;
 
       const mproj = createPerspective(
         30,
@@ -158,23 +145,38 @@ async function allImagesLoaded() {
       );
       const cam = createCamera([camX, camY, camZ], [look, 0, 0], [0, 300, 0]);
 
+      gl.useProgram(currProg);
+
+      // recalcula as normais com base no novo ângulo de rotação
+      let new_sphere = sphereConfigs(
+        obj.longitude,
+        obj.latitude,
+        obj.radius,
+        obj.x,
+        obj.y,
+        obj.z,
+        angle
+      );
+
       createSphere(
         gl,
         currProg,
         currSphere.vertices,
         currSphere.indices,
-        obj.texture
+        new_sphere.normals,
+        obj.texture,
+        obj.name === "sun"
       );
 
-      let transforma = math.multiply(cam, matrotY);
-      transforma = math.multiply(mproj, transforma);
-      transforma = math.flatten(math.transpose(transforma))._data;
+      let transformaproj = math.multiply(cam, matrotY);
+      transformaproj = math.multiply(mproj, transformaproj);
+      transformaproj = math.flatten(math.transpose(transformaproj))._data;
+
+      const transfPtr = gl.getUniformLocation(currProg, "transfproj");
+      gl.uniformMatrix4fv(transfPtr, false, transformaproj);
 
       if (index === 0) gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-      gl.useProgram(currProg);
-      const transfPtr = gl.getUniformLocation(currProg, "transf");
-      gl.uniformMatrix4fv(transfPtr, false, transforma);
       gl.drawElements(
         gl.TRIANGLES,
         currSphere.indices.length,
@@ -185,18 +187,14 @@ async function allImagesLoaded() {
 
     angle += 0.1;
 
-    lastFrameTime = currentTime;
-
     requestAnimationFrame(draw);
   }
 
   draw();
 }
 
-// Contador para rastrear o número de imagens carregadas
 let loadedImagesCount = 0;
 
-// Função para verificar se todas as imagens foram carregadas
 function checkAllImagesLoaded() {
   loadedImagesCount++;
   if (loadedImagesCount === imageUrls.length) {
@@ -204,7 +202,6 @@ function checkAllImagesLoaded() {
   }
 }
 
-// Percorre todas as URLs das imagens
 imageUrls.forEach((imageUrl) => {
   const img = new Image();
   img.onload = checkAllImagesLoaded;
