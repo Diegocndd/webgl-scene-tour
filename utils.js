@@ -100,6 +100,16 @@ export const objects = (images) => {
       z: 0,
       texture: images[9],
     },
+    {
+      name: "unknown",
+      longitude: 20,
+      latitude: 20,
+      radius: 0.6,
+      x: -2,
+      y: -1.6,
+      z: 0,
+      texture: images[2],
+    },
   ];
 };
 

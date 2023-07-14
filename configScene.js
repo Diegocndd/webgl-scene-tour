@@ -1,4 +1,13 @@
-export function createSphere(gl, prog, vertices, indices, normals, tex, isSun) {
+export function createSphere(
+  gl,
+  prog,
+  vertices,
+  indices,
+  normals,
+  tex,
+  isSun,
+  isSolid
+) {
   const campos = [-10, 0, 4];
 
   const vertexBuffer = gl.createBuffer();
@@ -56,6 +65,9 @@ export function createSphere(gl, prog, vertices, indices, normals, tex, isSun) {
 
   var camposPtr = gl.getUniformLocation(prog, "campos");
   gl.uniform3fv(camposPtr, campos);
+
+  var isSolidPtr = gl.getUniformLocation(prog, "isSolid");
+  gl.uniform1i(isSolidPtr, isSolid ? 1 : 0);
 
   ///////////////////
 

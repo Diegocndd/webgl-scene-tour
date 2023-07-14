@@ -159,7 +159,8 @@ async function allImagesLoaded() {
         currSphere.indices,
         new_sphere.normals,
         obj.texture,
-        obj.name === "sun"
+        obj.name === "sun",
+        obj.name === "unknown"
       );
 
       let transformaproj = math.multiply(cam, matrotY);
